@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'material.dart';
+
 void main() => runApp(const App());
 
 /// App class
@@ -27,10 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   /// List of pages
   final List<Widget> _pages = <Widget>[
-    const Text(
-      'Material widget',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
+    const MaterialExamplePage(),
     const Text(
       'Inline widget',
       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
