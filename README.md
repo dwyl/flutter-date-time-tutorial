@@ -20,6 +20,8 @@
 - [_How_? 👩‍💻](#how-)
   - [Prerequisites? 📝](#prerequisites-)
   - [0. Project setup](#0-project-setup)
+  - [1. Setting up both pages](#1-setting-up-both-pages)
+  - [2. `Material` Date/Time Pickers](#2-material-datetime-pickers)
 
 
 # Why? 🤷‍
@@ -85,3 +87,122 @@ this output on the terminal.
 
 This means everything is correctly setup!
 We are ready to start implementing!
+
+
+## 1. Setting up both pages
+
+Before adding our date and time pickers,
+we are going to add two different pages:
+
+- the first page will showcase the implementation 
+of the official `DatePicker` and `TimePicker`,
+the official Material widgets that are commonly used in `Flutter` apps.
+- the second page will pertain to **inline pickers**,
+meaning there won't be any dialogue/modals showing up 
+and hijacking the screen
+whenever a person wishes to change date/time.
+
+> **Note:**
+>
+> If you want to know *why* we're wanting to
+> **not** use modals,
+> visit https://github.com/dwyl/product-ux-research/issues/38 for more context.
+
+With this in mind,
+let's set up a [`BottomNavigationBar`](https://api.flutter.dev/flutter/material/BottomNavigationBar-class.html)
+to toggle between these two scenarios.
+In `lib/main.dart`,
+change it to:
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const App());
+
+/// App class
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: HomePage(),
+    );
+  }
+}
+
+/// HomePage with BottomBarNavigation
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  /// List of pages
+  final List<Widget> _pages = <Widget>[
+    const Text(
+      'Material widget',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
+    const Text(
+      'Inline widget',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    )
+  ];
+
+  /// Callback function that changes the index to show the selected page
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter Date Time Pickers'),
+      ),
+      body: Center(
+        child: _pages.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.adjust),
+            label: 'Material',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.border_color),
+            label: 'Inline',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+```
+
+Whenever the person taps on either `BottomNavigationBar` item,
+they change the index of the page being shown
+(this is handled by `_onItemTapped`).
+If you run the app,
+you should see this in action.
+
+<p align='center'>
+    <img width="250" src="https://github.com/dwyl/flutter-date-time-tutorial/assets/17494745/9d960e8d-0814-412e-9e9b-7f150683cc6d">
+</p>
+
+Awesome!
+Now we're ready to rock 🎸!
+
+
+## 2. `Material` Date/Time Pickers
+

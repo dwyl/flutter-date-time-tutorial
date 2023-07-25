@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [BottomNavigationBar].
-
 void main() => runApp(const App());
 
+/// App class
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -15,6 +14,7 @@ class App extends StatelessWidget {
   }
 }
 
+/// HomePage with BottomBarNavigation
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -25,6 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
+  /// List of pages
   final List<Widget> _pages = <Widget>[
     const Text(
       'Material widget',
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
     )
   ];
 
+  /// Callback function that changes the index to show the selected page
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
