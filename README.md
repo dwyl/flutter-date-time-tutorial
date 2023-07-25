@@ -21,7 +21,9 @@
   - [Prerequisites? 📝](#prerequisites-)
   - [0. Project setup](#0-project-setup)
   - [1. Setting up both pages](#1-setting-up-both-pages)
-  - [2. `Material` Date/Time Pickers](#2-material-datetime-pickers)
+  - [2. (Option 1) `Material` Date/Time Pickers](#2-option-1-material-datetime-pickers)
+    - [2.1 Editing **date** and **time** separately](#21-editing-date-and-time-separately)
+    - [2.2 Editing **date** and **time** with single button](#22-editing-date-and-time-with-single-button)
 
 
 # Why? 🤷‍
@@ -204,7 +206,251 @@ Awesome!
 Now we're ready to rock 🎸!
 
 
-## 2. `Material` Date/Time Pickers
+## 2. (Option 1) `Material` Date/Time Pickers
+
+Let's go over the first option,
+which is arguably the most "mainstream" and common approach
+when it comes to editing `DateTime` objects. 
+
+With [`showDatePicker`](https://api.flutter.dev/flutter/material/showDatePicker.html)
+and [`TimePicker`](https://api.flutter.dev/flutter/material/showTimePicker.html),
+we can respectively spawn a Material Design date and time picker,
+respectively. 
+
+Let's see how this happens!
+Before implementing,
+we're going to be using the 
+[`intl`](https://pub.dev/packages/intl)
+package to correctly format the `DateTime` object
+that is going to be shown and mutated.
+
+Run `dart pub add intl`
+and wait for the dependency to download.
+
+After this, create `lib/material.dart`.
+This file will contain the Material example page.
 
 
+### 2.1 Editing **date** and **time** separately 
+
+Head over to `lib/material.dart`
+and add the following code:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+/// Material example page.
+/// Showcases the usage of `DatePicker` and `TimePicker` to change date and time.
+class MaterialExamplePage extends StatefulWidget {
+  const MaterialExamplePage({super.key});
+
+  @override
+  State<MaterialExamplePage> createState() => _MaterialExamplePageState();
+}
+
+class _MaterialExamplePageState extends State<MaterialExamplePage> {
+  DateTime dateTime = DateTime.now();
+
+  /// Opens date picker and returns possible `DateTime` object.
+  Future<DateTime?> pickDate() => showDatePicker(context: context, initialDate: dateTime, firstDate: DateTime(1900), lastDate: DateTime(2100));
+
+  /// Opens time picker and returns possible `TimeOfDay` object.
+  Future<TimeOfDay?> pickTime() => showTimePicker(context: context, initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  DateFormat('yyyy-MM-dd').format(dateTime),
+                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  DateFormat(' kk:mm').format(dateTime),
+                  style: const TextStyle(fontSize: 30),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade300),
+                      child: const Text(
+                        "Date",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () async {
+                        final newDate = await pickDate();
+                        if (newDate == null) return; // person pressed 'CANCEL'
+
+                        // Update datetime object that's shown with new date
+                        final newDateTime = DateTime(newDate.year, newDate.month, newDate.day, dateTime.hour, dateTime.minute);
+                        setState(
+                          () => dateTime = newDateTime,
+                        );
+                      }),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade300),
+                      child: const Text(
+                        "Time",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () async {
+                        final newTime = await pickTime();
+                        if (newTime == null) return; // person pressed 'CANCEL'
+
+                        // Update datetime object that's shown with new time
+                        final newDateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, newTime.hour, newTime.minute);
+                        setState(
+                          () => dateTime = newDateTime,
+                        );
+                      })
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+Let's break down the code we've implemented.
+
+- we've created a *stateful widget page* called `MaterialExamplePage`
+which will be the page being shown when the person
+selects the `Material` option in the bottom navigation bar.
+- inside `_MaterialExamplePageState`,
+we have a `DateTime` field, 
+which pertains to the [`DateTime`](https://api.flutter.dev/flutter/dart-core/DateTime-class.html) 
+object being shown and edited by the person.
+- we've created **`pickDate`** and **`pickTime`**
+functions that, when invoked,
+use `showDatePicker` and `showTimePicker`, respectively.
+Calling these functions will show the picker widget dialogue.
+- we are using the [`DateFormat`](https://api.flutter.dev/flutter/intl/DateFormat-class.html) 
+class from `intl` package
+to correctly format the `dateTime` object
+and show it to the person.
+- we are rendering two `ElevatedButtons`
+that call `pickDate` and `pickTime` functions.
+
+Now, we just need to use this page
+in `lib/main.dart`.
+Change the `_pages` field so it uses this newly created page.
+
+```dart
+final List<Widget> _pages = <Widget>[
+  const MaterialExamplePage(),
+  const Text(
+    'Inline widget',
+    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+  )
+];
+```
+
+If we run the app,
+we'll be able to *separately* 
+set the date and the time components
+of the `dateTime` object.
+
+
+<p align='center'>
+    <img width="250" src="https://github.com/dwyl/flutter-date-time-tutorial/assets/17494745/81701f8d-3e32-42b4-958c-486e0303b67f">
+</p>
+
+
+### 2.2 Editing **date** and **time** with single button
+
+Instead of having separate buttons
+to edit the `date` and `time` in an isolated manner,
+let's change both at the same time by just clicking a single button.
+
+For this, add a new `ElevatedButton` below the ones
+we've already added.
+
+```dart
+@override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Other widgets...
+
+            // Add this line
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.orange.shade400),
+                      onPressed: pickDateTime,
+                      child: const Text(
+                        "DateTime",
+                        style: TextStyle(fontSize: 20),
+                      )),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+```
+
+Let's implement the `pickDateTime` function.
+In the same class `_MaterialExamplePageState`,
+create this function above the `build` one.
+
+```dart
+  /// Opens date picker and time picker consecutively and sets the `DateTime` field of the page.
+  Future pickDateTime() async {
+    DateTime? date = await pickDate();
+    if (date == null) return; // pressed 'CANCEL'
+
+    TimeOfDay? time = await pickTime();
+    if (time == null) return; // pressed 'CANCEL'
+
+    // Update datetime object that's shown with new date
+    final newDateTime = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    setState(
+      () => dateTime = newDateTime,
+    );
+  }
+```
+
+As you can see, 
+we are simply calling the functions
+we've already implemented (`pickDate` and `pickTime`)
+and are updating the `dateTime` field accordingly.
+Pretty simple, right?
+
+Run the app and click the `DateTime` button
+we've just added.
+You should be able to set both *date* and *time*.
+
+
+<p align='center'>
+    <img width="250" src="https://github.com/dwyl/flutter-date-time-tutorial/assets/17494745/177751aa-408f-4887-9b7e-64f72b0d4351">
+</p>
+ 
+Great job! 🥳
 
