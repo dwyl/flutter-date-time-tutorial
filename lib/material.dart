@@ -16,6 +16,7 @@ class MaterialExamplePage extends StatefulWidget {
 
 class _MaterialExamplePageState extends State<MaterialExamplePage> {
   DateTime dateTime = DateTime.now();
+  int counter = 0;
 
   /// Opens date picker and returns possible `DateTime` object.
   Future<DateTime?> pickDate() => showDatePicker(context: context, initialDate: dateTime, firstDate: DateTime(1900), lastDate: DateTime(2100));
@@ -41,9 +42,10 @@ class _MaterialExamplePageState extends State<MaterialExamplePage> {
 
     // Update datetime object that's shown with new date
     final newDateTime = DateTime(date.year, date.month, date.day, time.hour, time.minute);
-    setState(
-      () => dateTime = newDateTime,
-    );
+    setState(() {
+      dateTime = newDateTime;
+      counter = counter + 1;
+    });
   }
 
   @override
@@ -54,6 +56,18 @@ class _MaterialExamplePageState extends State<MaterialExamplePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 32.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "You've updated this $counter time(s).",
+                    style: const TextStyle(fontSize: 25),
+                  ),
+                ],
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -85,9 +99,10 @@ class _MaterialExamplePageState extends State<MaterialExamplePage> {
 
                         // Update datetime object that's shown with new date
                         final newDateTime = DateTime(newDate.year, newDate.month, newDate.day, dateTime.hour, dateTime.minute);
-                        setState(
-                          () => dateTime = newDateTime,
-                        );
+                        setState(() {
+                          dateTime = newDateTime;
+                          counter = counter + 1;
+                        });
                       }),
                   ElevatedButton(
                       key: materialTimeButtonKey,
@@ -102,9 +117,10 @@ class _MaterialExamplePageState extends State<MaterialExamplePage> {
 
                         // Update datetime object that's shown with new time
                         final newDateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, newTime.hour, newTime.minute);
-                        setState(
-                          () => dateTime = newDateTime,
-                        );
+                        setState(() {
+                          dateTime = newDateTime;
+                          counter = counter + 1;
+                        });
                       })
                 ],
               ),

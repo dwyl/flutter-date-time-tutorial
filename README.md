@@ -27,6 +27,7 @@
     - [2.3 Forcing `24-hour` type input in `TimePicker`](#23-forcing-24-hour-type-input-in-timepicker)
   - [3. (Option 2) `Cupertino` Pickers](#3-option-2-cupertino-pickers)
     - [3.1 Fixing scrolling behaviour on `Flutter Web`](#31-fixing-scrolling-behaviour-on-flutter-web)
+  - [4. (Optional) Number of times the `dateTime` field has been updated](#4-optional-number-of-times-the-datetime-field-has-been-updated)
 
 
 # Why? 🤷‍
@@ -770,5 +771,81 @@ of devices that are **draggable**.
 And that's it!
 If you run the app in your browser,
 it should work properly now! 😀
+
+
+## 4. (Optional) Number of times the `dateTime` field has been updated
+
+In our specific case,
+for analytical purposes,
+we are interested in knowing 
+*how many times a person has updated their timers*.
+This feedback can be used to better understand 
+how people are using our app and how to make it *better*.
+
+Let's implement a simple timer to show this is easy to add!
+In a real-world scenario, 
+you'd make an API call instead of doing everything locally.
+We're doing so for simplification purposes.
+
+We'll implement this on the `Material` page,
+since the same procedure occurs in the `Cupertino` one, as well.
+
+Go to `lib/material.dart`
+and add a new `counter` field.
+
+```dart
+  int counter = 0;
+```
+
+Inside the `Column` `child` parameter,
+add this new widget on top of the array.
+
+```dart
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+
+      // Add this
+      Padding(
+        padding: const EdgeInsets.only(bottom: 32.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "You've updated this $counter time(s).",
+              style: const TextStyle(fontSize: 25),
+            ),
+          ],
+        ),
+      ),
+
+      //...
+    ]
+  )
+```
+
+We are simply adding a text that shows the current `counter` value.
+
+Next, all we need to do now 
+is to change every `setState` instance
+(where the `dateTime` field is being updated)
+to **increment this counter**.
+
+```dart
+    setState(() {
+      dateTime = newDateTime;
+      counter = counter + 1;
+    });
+```
+
+And you're all done! 😎
+
+Super easy, right?
+
+<p align='center'>
+    <img width="250" src="https://github.com/dwyl/flutter-date-time-tutorial/assets/17494745/dd12cbf8-7a94-4d5a-bb52-7bb0f2e1787d">
+</p>
+
+
 
 
