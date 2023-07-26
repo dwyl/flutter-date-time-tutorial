@@ -57,97 +57,95 @@ class _CupertinoExamplePageState extends State<CupertinoExamplePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                DateFormat('yyyy-MM-dd').format(dateTime),
+                style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                DateFormat(' kk:mm').format(dateTime),
+                style: const TextStyle(fontSize: 30),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                  DateFormat('yyyy-MM-dd').format(dateTime),
-                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  DateFormat(' kk:mm').format(dateTime),
-                  style: const TextStyle(fontSize: 30),
-                ),
+                ElevatedButton(
+                    key: cupertinoDateButtonKey,
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.purple.shade300),
+                    onPressed: () => _showDialog(
+                          CupertinoDatePicker(
+                            initialDateTime: dateTime,
+                            mode: CupertinoDatePickerMode.date,
+                            use24hFormat: true,
+                            // This shows day of week alongside day of month
+                            showDayOfWeek: true,
+                            // This is called when the user changes the date.
+                            onDateTimeChanged: (DateTime newDate) {
+                              setState(() => dateTime = newDate);
+                            },
+                          ),
+                        ),
+                    child: const Text(
+                      "Date",
+                      style: TextStyle(fontSize: 20),
+                    )),
+                ElevatedButton(
+                    key: cupertinoTimeButtonKey,
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.purple.shade300),
+                    child: const Text(
+                      "Time",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () => _showDialog(
+                          CupertinoDatePicker(
+                            initialDateTime: dateTime,
+                            mode: CupertinoDatePickerMode.time,
+                            use24hFormat: true,
+                            onDateTimeChanged: (DateTime newDate) {
+                              setState(() => dateTime = newDate);
+                            },
+                          ),
+                        ))
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      key: cupertinoDateButtonKey,
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.purple.shade300),
-                      onPressed: () => _showDialog(
-                            CupertinoDatePicker(
-                              initialDateTime: dateTime,
-                              mode: CupertinoDatePickerMode.date,
-                              use24hFormat: true,
-                              // This shows day of week alongside day of month
-                              showDayOfWeek: true,
-                              // This is called when the user changes the date.
-                              onDateTimeChanged: (DateTime newDate) {
-                                setState(() => dateTime = newDate);
-                              },
-                            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                    key: cupertinoDateTimeButtonKey,
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade400),
+                    onPressed: () => _showDialog(
+                          CupertinoDatePicker(
+                            initialDateTime: dateTime,
+                            mode: CupertinoDatePickerMode.dateAndTime,
+                            use24hFormat: true,
+                            onDateTimeChanged: (DateTime newDate) {
+                              setState(() => dateTime = newDate);
+                            },
                           ),
-                      child: const Text(
-                        "Date",
-                        style: TextStyle(fontSize: 20),
-                      )),
-                  ElevatedButton(
-                      key: cupertinoTimeButtonKey,
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.purple.shade300),
-                      child: const Text(
-                        "Time",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      onPressed: () => _showDialog(
-                            CupertinoDatePicker(
-                              initialDateTime: dateTime,
-                              mode: CupertinoDatePickerMode.time,
-                              use24hFormat: true,
-                              onDateTimeChanged: (DateTime newDate) {
-                                setState(() => dateTime = newDate);
-                              },
-                            ),
-                          ))
-                ],
-              ),
+                        ),
+                    child: const Text(
+                      "DateTime",
+                      style: TextStyle(fontSize: 20),
+                    )),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                      key: cupertinoDateTimeButtonKey,
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade400),
-                      onPressed: () => _showDialog(
-                            CupertinoDatePicker(
-                              initialDateTime: dateTime,
-                              mode: CupertinoDatePickerMode.dateAndTime,
-                              use24hFormat: true,
-                              onDateTimeChanged: (DateTime newDate) {
-                                setState(() => dateTime = newDate);
-                              },
-                            ),
-                          ),
-                      child: const Text(
-                        "DateTime",
-                        style: TextStyle(fontSize: 20),
-                      )),
-                ],
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
