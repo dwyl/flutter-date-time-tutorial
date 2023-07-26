@@ -1,3 +1,4 @@
+import 'package:app/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'material.dart';
@@ -30,10 +31,7 @@ class _HomePageState extends State<HomePage> {
   /// List of pages
   final List<Widget> _pages = <Widget>[
     const MaterialExamplePage(),
-    const Text(
-      'Cupertino widget',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    )
+    const CupertinoExamplePage()
   ];
 
   /// Callback function that changes the index to show the selected page
