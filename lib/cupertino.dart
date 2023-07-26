@@ -3,6 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+final cupertinoDateButtonKey = UniqueKey();
+final cupertinoTimeButtonKey = UniqueKey();
+final cupertinoDateTimeButtonKey = UniqueKey();
+
 class WebScrollBehaviour extends MaterialScrollBehavior {
   // Override behaviour methods and getters like dragDevices
   @override
@@ -22,7 +26,7 @@ class CupertinoExamplePage extends StatefulWidget {
 }
 
 class _CupertinoExamplePageState extends State<CupertinoExamplePage> {
-  DateTime dateTime = DateTime.now();
+  DateTime dateTime = DateTime.utc(2023, 7, 26);
 
   // This function displays a CupertinoModalPopup with a reasonable fixed height
   // which hosts CupertinoDatePicker.
@@ -78,6 +82,7 @@ class _CupertinoExamplePageState extends State<CupertinoExamplePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
+                      key: cupertinoDateButtonKey,
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.purple.shade300),
                       onPressed: () => _showDialog(
                             CupertinoDatePicker(
@@ -97,6 +102,7 @@ class _CupertinoExamplePageState extends State<CupertinoExamplePage> {
                         style: TextStyle(fontSize: 20),
                       )),
                   ElevatedButton(
+                      key: cupertinoTimeButtonKey,
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.purple.shade300),
                       child: const Text(
                         "Time",
@@ -121,6 +127,7 @@ class _CupertinoExamplePageState extends State<CupertinoExamplePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
+                      key: cupertinoDateTimeButtonKey,
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade400),
                       onPressed: () => _showDialog(
                             CupertinoDatePicker(

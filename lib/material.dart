@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-final dateButtonKey = UniqueKey();
-final timeButtonKey = UniqueKey();
-final dateTimeButtonKey = UniqueKey();
+final materialDateButtonKey = UniqueKey();
+final materialTimeButtonKey = UniqueKey();
+final materialDateTimeButtonKey = UniqueKey();
 
 /// Material example page.
 /// Showcases the usage of `DatePicker` and `TimePicker` to change date and time.
@@ -73,7 +73,7 @@ class _MaterialExamplePageState extends State<MaterialExamplePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                      key: dateButtonKey,
+                      key: materialDateButtonKey,
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade300),
                       child: const Text(
                         "Date",
@@ -90,7 +90,7 @@ class _MaterialExamplePageState extends State<MaterialExamplePage> {
                         );
                       }),
                   ElevatedButton(
-                      key: timeButtonKey,
+                      key: materialTimeButtonKey,
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade300),
                       child: const Text(
                         "Time",
@@ -115,7 +115,7 @@ class _MaterialExamplePageState extends State<MaterialExamplePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                      key: dateTimeButtonKey,
+                      key: materialDateTimeButtonKey,
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.orange.shade400),
                       onPressed: pickDateTime,
                       child: const Text(
