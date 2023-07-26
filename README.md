@@ -497,3 +497,205 @@ you should see the changes!
 
 
 ## 3. (Option 2) `Cupertino` Pickers
+
+While you may not want to use `Material` widgets,
+`Flutter` also offers official support for
+[**`Cupertino`** widgets ](https://docs.flutter.dev/ui/widgets/cupertino),
+which are iOS-style widgets.
+
+Let's implement them!
+First, let's create a new page `lib/cupertino.dart`
+and *use it* in `lib/main.dart`.
+
+```dart
+  final List<Widget> _pages = <Widget>[
+    const MaterialExamplePage(),
+    const CupertinoExamplePage()
+  ];
+```
+
+Now, in `lib/cupertino.dart`, add the following code.
+
+```dart
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+/// Cupertino example page.
+/// Showcases the usage of `DatePicker` and `TimePicker` to change date and time.
+class CupertinoExamplePage extends StatefulWidget {
+  const CupertinoExamplePage({super.key});
+
+  @override
+  State<CupertinoExamplePage> createState() => _CupertinoExamplePageState();
+}
+
+class _CupertinoExamplePageState extends State<CupertinoExamplePage> {
+  DateTime dateTime = DateTime.now();
+
+  // This function displays a CupertinoModalPopup with a reasonable fixed height
+  // which hosts CupertinoDatePicker.
+  void _showDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 216,
+        padding: const EdgeInsets.only(top: 6.0),
+        // The Bottom margin is provided to align the popup above the system
+        // navigation bar.
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        // Provide a background color for the popup.
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        // Use a SafeArea widget to avoid system overlaps.
+        child: SafeArea(
+          top: false,
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  DateFormat('yyyy-MM-dd').format(dateTime),
+                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  DateFormat(' kk:mm').format(dateTime),
+                  style: const TextStyle(fontSize: 30),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.purple.shade300),
+                      onPressed: () => _showDialog(
+                      CupertinoDatePicker(
+                        initialDateTime: dateTime,
+                        mode: CupertinoDatePickerMode.date,
+                        use24hFormat: true,
+                        // This shows day of week alongside day of month
+                        showDayOfWeek: true,
+                        // This is called when the user changes the date.
+                        onDateTimeChanged: (DateTime newDate) {
+                          setState(() => dateTime = newDate);
+                        },
+                      ),
+                    ),
+                      child: const Text(
+                        "Date",
+                        style: TextStyle(fontSize: 20),
+                      )),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.purple.shade300),
+                      child: const Text(
+                        "Time",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () => _showDialog(
+                      CupertinoDatePicker(
+                        initialDateTime: dateTime,
+                        mode: CupertinoDatePickerMode.time,
+                        use24hFormat: true,
+                        onDateTimeChanged: (DateTime newDate) {
+                          setState(() => dateTime = newDate);
+                        },
+                      ),
+                    ))
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade400),
+                      onPressed: () => _showDialog(
+                      CupertinoDatePicker(
+                        initialDateTime: dateTime,
+                        mode: CupertinoDatePickerMode.dateAndTime,
+                        use24hFormat: true,
+                        onDateTimeChanged: (DateTime newDate) {
+                          setState(() => dateTime = newDate);
+                        },
+                      ),
+                    ),
+                      child: const Text(
+                        "DateTime",
+                        style: TextStyle(fontSize: 20),
+                      )),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+Let's break it down!
+`Cupertino` widgets only work with the 
+[`showCupertinoModalPopup`](https://api.flutter.dev/flutter/cupertino/showCupertinoModalPopup.html)
+function.
+This is why we create the `_showDialog` function
+which *builds* the popup modal. 
+This function will be used in each button to change the `dateTime` object,
+similarly to the ones found in `lib/material.dart`.
+
+In each button,
+when pressed,
+we mutate the `dateTime` field in a similar fashion.
+For example, check the following snippet:
+
+```dart
+_showDialog(
+  CupertinoDatePicker(
+    initialDateTime: dateTime,
+    mode: CupertinoDatePickerMode.date,
+    use24hFormat: true,
+    // This shows day of week alongside day of month
+    showDayOfWeek: true,
+    // This is called when the user changes the date.
+    onDateTimeChanged: (DateTime newDate) {
+      setState(() => dateTime = newDate);
+    },
+  ),
+)
+```
+
+This is invoked when the person wants to change the **date**.
+The `mode` parameter of [`CupertinoDatePicker`](https://api.flutter.dev/flutter/cupertino/CupertinoDatePicker-class.html)
+will define a different behaviour.
+If we were to change the time, we'd do `CupertinoDatePickerMode.time`.
+Similarly, in the "DateTime" button,
+we change to `CupertinoDatePickerMode.dateAndTime`.
+
+And that's it!
+If we run,
+we can change the `dateTime` object accordingly!
+
+
+<p align='center'>
+    <img width="250" src="https://github.com/dwyl/flutter-date-time-tutorial/assets/17494745/4d7fdf39-ed7b-40fa-a7f2-5fbd794ccdfc">
+</p>
+
