@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'material.dart';
 
+final materialPageKey = UniqueKey();
+final materialButtonKey = UniqueKey();
+final cupertinoPageKey = UniqueKey();
+final cupertinoButtonKey = UniqueKey();
+
+// coverage:ignore-start
 void main() => runApp(const App());
+// coverage:ignore-end
 
 /// App class
 class App extends StatelessWidget {
@@ -29,10 +36,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   /// List of pages
-  final List<Widget> _pages = <Widget>[
-    const MaterialExamplePage(),
-    const CupertinoExamplePage()
-  ];
+  final List<Widget> _pages = <Widget>[MaterialExamplePage(key: materialPageKey), CupertinoExamplePage(key: cupertinoPageKey)];
 
   /// Callback function that changes the index to show the selected page
   void _onItemTapped(int index) {
@@ -51,13 +55,13 @@ class _HomePageState extends State<HomePage> {
         child: _pages.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.adjust),
+            icon: Icon(key: materialButtonKey,Icons.adjust),
             label: 'Material',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.power_input_sharp),
+            icon: Icon(key: cupertinoButtonKey, Icons.power_input_sharp),
             label: 'Cupertino',
           ),
         ],
