@@ -17,7 +17,15 @@ class _MaterialExamplePageState extends State<MaterialExamplePage> {
   Future<DateTime?> pickDate() => showDatePicker(context: context, initialDate: dateTime, firstDate: DateTime(1900), lastDate: DateTime(2100));
 
   /// Opens time picker and returns possible `TimeOfDay` object.
-  Future<TimeOfDay?> pickTime() => showTimePicker(context: context, initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
+  Future<TimeOfDay?> pickTime() => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      });
 
   /// Opens date picker and time picker consecutively and sets the `DateTime` field of the page.
   Future pickDateTime() async {

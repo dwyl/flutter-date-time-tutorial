@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = <Widget>[
     const MaterialExamplePage(),
     const Text(
-      'Inline widget',
+      'Cupertino widget',
       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
     )
   ];
@@ -59,8 +59,8 @@ class _HomePageState extends State<HomePage> {
             label: 'Material',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.border_color),
-            label: 'Inline',
+            icon: Icon(Icons.power_input_sharp),
+            label: 'Cupertino',
           ),
         ],
         currentIndex: _selectedIndex,

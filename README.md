@@ -98,14 +98,18 @@ we are going to add two different pages:
 
 - the first page will showcase the implementation 
 of the official `DatePicker` and `TimePicker`,
-the official Material widgets that are commonly used in `Flutter` apps.
-- the second page will pertain to **inline pickers**,
-meaning there won't be any dialogue/modals showing up 
-and hijacking the screen
-whenever a person wishes to change date/time.
+the official **`Material`** widgets that are commonly used in `Flutter` apps.
+- the second page will pertain to **`Cupertino`** widgets.
 
 > **Note:**
 >
+> We **do not like modals**.
+> Both of these widget types make use of modals/popups.
+> While we're wanting to build our own pickers that 
+> *do not* use these as a crutch, 
+> we'll have to settle for these *for now* to speed up the development
+> of our [`app`](https://github.com/dwyl/app).
+> 
 > If you want to know *why* we're wanting to
 > **not** use modals,
 > visit https://github.com/dwyl/product-ux-research/issues/38 for more context.
@@ -151,7 +155,7 @@ class _HomePageState extends State<HomePage> {
       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
     ),
     const Text(
-      'Inline widget',
+      'Cupertino widget',
       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
     )
   ];
@@ -179,8 +183,8 @@ class _HomePageState extends State<HomePage> {
             label: 'Material',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.border_color),
-            label: 'Inline',
+            icon: Icon(Icons.power_input_sharp),
+            label: 'Cupertino',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -356,7 +360,7 @@ Change the `_pages` field so it uses this newly created page.
 final List<Widget> _pages = <Widget>[
   const MaterialExamplePage(),
   const Text(
-    'Inline widget',
+    'Cupertino widget',
     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
   )
 ];
