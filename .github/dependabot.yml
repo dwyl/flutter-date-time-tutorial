@@ -1,0 +1,7 @@
+version: 2
+updates:
+- package-ecosystem: pub
+  schedule:
+    interval: weekly
+    time: "17:00"
+    timezone: Europe/London
