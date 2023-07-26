@@ -26,6 +26,7 @@
     - [2.2 Editing **date** and **time** with single button](#22-editing-date-and-time-with-single-button)
     - [2.3 Forcing `24-hour` type input in `TimePicker`](#23-forcing-24-hour-type-input-in-timepicker)
   - [3. (Option 2) `Cupertino` Pickers](#3-option-2-cupertino-pickers)
+    - [3.1 Fixing scrolling behaviour on `Flutter Web`](#31-fixing-scrolling-behaviour-on-flutter-web)
 
 
 # Why? 🤷‍
@@ -698,4 +699,76 @@ we can change the `dateTime` object accordingly!
 <p align='center'>
     <img width="250" src="https://github.com/dwyl/flutter-date-time-tutorial/assets/17494745/4d7fdf39-ed7b-40fa-a7f2-5fbd794ccdfc">
 </p>
+
+
+### 3.1 Fixing scrolling behaviour on `Flutter Web`
+
+You might have noticed that 
+if you run the `Cupertino` page on your browser,
+the scrolling behaviour *doesn't work*, 
+meaning you can't actually set the `dateTime` field.
+
+Let's fix this! 🔧
+
+Luckily for us, it's quite simple!
+We need to **override the scroll behaviour**
+and enable mouse drag.
+
+So, go to `lib/cupertino.dart`,
+and change `_showDialog`, like so:
+
+```dart
+void _showDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => ScrollConfiguration(
+        behavior: WebScrollBehaviour(),
+        child: Container(
+          height: 216,
+          padding: const EdgeInsets.only(top: 6.0),
+          // The Bottom margin is provided to align the popup above the system
+          // navigation bar.
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          // Provide a background color for the popup.
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+          // Use a SafeArea widget to avoid system overlaps.
+          child: SafeArea(
+            top: false,
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+```
+
+We've wrapped the `Container` inside `builder`
+with a [`ScrollConfiguration`](https://api.flutter.dev/flutter/widgets/ScrollConfiguration-class.html)
+class and using `WebScrollBehaviour` custom behaviour,
+which is something we need to implement.
+
+Speaking of which, let's do that now!
+
+In the same file, add the class:
+
+```dart
+class WebScrollBehaviour extends MaterialScrollBehavior {
+  // Override behaviour methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
+}
+```
+
+We are adding the `mouse` `PointerDeviceKind` to the list
+of devices that are **draggable**.
+
+And that's it!
+If you run the app in your browser,
+it should work properly now! 😀
+
 
