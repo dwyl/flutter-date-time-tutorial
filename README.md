@@ -24,6 +24,8 @@
   - [2. (Option 1) `Material` Date/Time Pickers](#2-option-1-material-datetime-pickers)
     - [2.1 Editing **date** and **time** separately](#21-editing-date-and-time-separately)
     - [2.2 Editing **date** and **time** with single button](#22-editing-date-and-time-with-single-button)
+    - [2.3 Forcing `24-hour` type input in `TimePicker`](#23-forcing-24-hour-type-input-in-timepicker)
+  - [3. (Option 2) `Cupertino` Pickers](#3-option-2-cupertino-pickers)
 
 
 # Why? 🤷‍
@@ -458,3 +460,40 @@ You should be able to set both *date* and *time*.
  
 Great job! 🥳
 
+
+### 2.3 Forcing `24-hour` type input in `TimePicker`
+
+Sometimes, it may be useful to unconditionally display 
+the `TimePicker` in a 24-hour format,
+instead of using the AM/PM system.
+
+To override this behaviour,
+we ought to use [`MediaQuery`](https://api.flutter.dev/flutter/widgets/MediaQuery-class.html)
+to change the locale behaviour.
+
+Open `lib/material.dart`,
+and locate the `pickTime` function we've implemented.
+Add the `builder` parameter, like so.
+
+```dart
+  /// Opens time picker and returns possible `TimeOfDay` object.
+  Future<TimeOfDay?> pickTime() => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      });
+```
+
+Now, if you run the app,
+you should see the changes!
+
+<p align='center'>
+    <img width="250" src="https://github.com/dwyl/flutter-date-time-tutorial/assets/17494745/40feee37-01fa-407c-8da1-660b8df179ff">
+</p>
+
+
+## 3. (Option 2) `Cupertino` Pickers
